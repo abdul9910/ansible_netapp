@@ -1,0 +1,40 @@
+##########################################################
+# Variable File for 'netapp_full_install_multi-part.yml' #
+##########################################################
+
+# Cluster Login
+clusterip: 192.168.222.132
+user: admin
+pass: Netbackup123
+https_option: true
+validate_certs_option: false
+
+# Variables for '01_install_licenses_setup_ntp.yml'
+clustername: cluster01
+ntpservers: 192.168.222.136
+timezone: Australia/Sydney
+
+# Variables for '02_create_and_rename_aggregate.yml'
+aggrrootoldname: aggr1_new
+aggrrootnewname: aggr1
+aggrdataname: aggr1_CLUSTER_01_data
+diskcount: 8
+
+# Variables for '03_create_svm.yml'
+svmname: SVM1
+rootvolname: SVM1_root
+rootvolaggr: aggr1_CLUSTER_01_data
+rootvolsecurity: unix
+allowedaggrs: aggr1_CLUSTER_01_data
+allowedprotocols: nfs
+nfsclientmatchsubnet: 192.168.222.0/24
+nfsvolname1: NFS_vol1
+nfsaggr: aggr1_CLUSTER_01_data
+nfsvolsize: 1 # Size is in GB
+
+# Variables for '05_create_volume.yml'
+aggr: aggr1_CLUSTER_01_data
+nfsvolname2: NFS_vol2
+vservername: SVM1
+nfsvolsize2: 1 # Size is in GB
+

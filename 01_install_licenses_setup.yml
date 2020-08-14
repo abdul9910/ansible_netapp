@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  gather_facts: false
+  name: NetApp licensing
+  vars:
+    login: &login    
+     hostname: "{{ clusterip }}"
+     username: "{{ user }}"
+     password: "{{ pass }}"
+     https: "{{ https_option }}"
+     validate_certs: "{{ validate_certs_option }}"
+  vars_files:
+  - variables.yml
+  tasks:
+  - name: Install Licenses
+    na_ontap_cluster:
+      state: present
+      cluster_name: "{{ clustername }}"
+      license_code: "{{ item }}"
+      <<: *login
+    loop:
+      - CAYHXPKBFDUFZGABGAAAAAAAAAAA
+      - APTLYPKBFDUFZGABGAAAAAAAAAAA
+      - WSKTAQKBFDUFZGABGAAAAAAAAAAA
+      - CGVTEQKBFDUFZGABGAAAAAAAAAAA
+      - OUVWXPKBFDUFZGABGAAAAAAAAAAA
+      - QFATWPKBFDUFZGABGAAAAAAAAAAA
+      - UHGXBQKBFDUFZGABGAAAAAAAAAAA
+      - GCEMCQKBFDUFZGABGAAAAAAAAAAA
+      - KYMEAQKBFDUFZGABGAAAAAAAAAAA
+      - SWBBDQKBFDUFZGABGAAAAAAAAAAA
+      - YDPPZPKBFDUFZGABGAAAAAAAAAAA
+      - INIIBQKBFDUFZGABGAAAAAAAAAAA
+  - debug: msg="Licenses have been installed on {{ clustername }}"

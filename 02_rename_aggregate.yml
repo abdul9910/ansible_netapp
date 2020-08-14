@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: false
+  name: NetApp Aggregate Setup
+  vars:
+    login: &login
+     hostname: "{{ clusterip }}"
+     username: "{{ user }}"
+     password: "{{ pass }}"
+     https: "{{ https_option }}"
+     validate_certs: "{{ validate_certs_option }}"
+  vars_files:
+  - variables_all.yml
+  tasks:
+  - name: Rename Root Aggregate
+    na_ontap_aggregate:
+      state: present
+      service_state: online
+      from_name: "{{ aggrrootoldname }}"
+      name: "{{ aggrrootnewname }}"
+      <<: *login
+  - debug: msg="Aggregate {{ aggrrootoldname }} has been renamed to {{ aggrrootnewname }} "
