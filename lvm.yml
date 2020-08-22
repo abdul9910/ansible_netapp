@@ -1,0 +1,24 @@
+- hosts: ubos01
+  user: root
+  tasks:
+  - name: VGCreate
+    lvg:
+        vg: vgdata
+        pvs: /dev/sdb5, /dev/sdb6
+  - name: LVCreate
+    lvol:
+        vg: vgdata
+        lv: data01
+        size: 5GB
+  - name: Create File System
+    filesystem:
+       fstype: ext4
+       dev: /dev/vgdata/data01
+  - name: Mount LVM Volume
+    mount:
+       name: /data01
+       src: /dev/vgdata/data01
+       fstype: ext4
+       status: mounted
+
+      
