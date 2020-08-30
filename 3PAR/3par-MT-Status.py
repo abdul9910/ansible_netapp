@@ -32,7 +32,8 @@ node_fail_message = "Node degraded or failed. Contact HP Support"
 node_ok_message = "All node is OK"
 vv_ok_message = "All virtual volume is OK"
 vv_fail_message = "Virtual volume failed or degraded. Contact HP Support"
-
+ps_fail_message = "Power supply failed or degraded. Contact HP Support"
+ps_ok_message = "All power supply is OK"
 
 npres = "notpresent"
 host1="192.168.222.140"
@@ -41,6 +42,7 @@ paswd="changeme"
 cmd1="check_pd"
 cmd2="check_node"
 cmd3="check_vv"
+cmd4="check_ps"
 
 class Host(object):
     "Host class contains all information needed for connect to",
@@ -124,6 +126,8 @@ def check_node_worker(data):
             ret_data.append(line.split(" "))
     return ret_data
 
+
+
 def filter_fun(line):
     return filter(None, line.split(" "))
     
@@ -138,6 +142,23 @@ def check_vv_worker(data):
             str_list = filter_fun(line)
             ret_data.append(str_list)
         elif fail in line.lower():
+            str_list = filter_fun(line)
+            ret_data.append(str_list)
+    return ret_data
+
+def check_ps_worker(data):
+    ret_data = []
+    for line in (data.decode("utf-8")).split('\n'):
+        line = line.strip()
+        if "Node" in line:
+            ret_data.append(line.split(" "))
+        elif degrad in line.lower():
+            str_list = filter_fun(line)
+            ret_data.append(str_list)
+        elif fail in line.lower():
+            str_list = filter_fun(line)
+            ret_data.append(str_list)
+        elif npres in line.lower():
             str_list = filter_fun(line)
             ret_data.append(str_list)
     return ret_data
@@ -178,6 +199,7 @@ def command_check_pd(client):
         print("Command 'check_pd fail")
 
 
+
 def command_check_node(client):
     try:
         data = ssh_command_executor(client,
@@ -194,9 +216,29 @@ def command_check_node(client):
     except paramiko.SSHException:
         print("Command 'check_node' fail")
 
+
+def command_check_ps(client):
+    try:
+        data = ssh_command_executor(
+            client,
+            "shownode -ps -showcols Node,PS,ACState,DCState,PSState")
+        status = check_ps_worker(data)
+        if len(status) > 1:
+            print(host1)
+            print(critical + ps_fail_message)
+            for i in status:
+                print(i)
+        else:
+            print(host1)
+            print(normal + ps_ok_message)
+    except paramiko.SSHException:
+        print("Command 'check_ps' fail")
+
+
 commands = {"check_pd": command_check_pd,
             "check_node": command_check_node,
-            "check_vv": command_check_vv
+            "check_vv": command_check_vv,
+            "check_ps": command_check_ps
             }
 
 def main():
@@ -216,5 +258,6 @@ if __name__ == '__main__':
     host.command_execute(cmd1)
     host.command_execute(cmd2)
     host.command_execute(cmd3)
+    host.command_execute(cmd4)
     host.close_connect()
     sys.exit(0)
