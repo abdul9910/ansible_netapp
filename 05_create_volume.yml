@@ -10,7 +10,7 @@
      https: "{{ https_option }}"
      validate_certs: "{{ validate_certs_option }}"
   vars_files:
-  - variables.yml
+  - login_all.yml
   tasks:
   - name: Volume Create
     na_ontap_volume:

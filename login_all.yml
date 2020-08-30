@@ -1,0 +1,17 @@
+##########################################################
+# Variable File for 'netapp_full_install_multi-part.yml' #
+##########################################################
+
+# Cluster Login
+clusterip: 192.168.222.132
+user: admin
+pass: Netbackup123
+https_option: true
+validate_certs_option: false
+vservername: vserver1
+nfsvolname2: vol1
+# Variables for '01_install_licenses_setup_ntp.yml'
+clustername: cluster01
+ntpservers: 192.168.222.136
+timezone: Australia/Sydney
+
