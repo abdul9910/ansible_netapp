@@ -31,6 +31,8 @@ disk_ok_message = "All physical disk is OK"
 node_fail_message = "Node degraded or failed. Contact HP Support"
 node_ok_message = "All node is OK"
 vv_ok_message = "All virtual volume is OK"
+vv_fail_message = "Virtual volume failed or degraded. Contact HP Support"
+
 
 npres = "notpresent"
 host1="192.168.222.140"
